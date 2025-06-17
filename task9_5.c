@@ -1,26 +1,23 @@
-import os
-import tempfile
-import subprocess
+#include <stdio.h>
+#include <stdlib.h>
 
-def check_access(path):
-    can_read = os.access(path, os.R_OK)
-    can_write = os.access(path, os.W_OK)
-    print(f"Read access: {can_read}, Write access: {can_write}")
+int main() {
+    system("touch /tmp/tempfile.txt");
+    system("echo 'Дані' > /tmp/tempfile.txt");
 
-if __name__ == "__main__":
-    with tempfile.NamedTemporaryFile(delete=False) as tmp:
-        path = tmp.name
-        print(f"Temporary file created at: {path}")
+    printf("Змінюємо власника на root і права доступу...\n");
+    system("sudo chown root:root /tmp/tempfile.txt");
+    system("sudo chmod 600 /tmp/tempfile.txt");
 
-    # Change ownership and permissions as root
-    subprocess.run(['sudo', 'chown', 'root:root', path])
-    subprocess.run(['sudo', 'chmod', '600', path])
+    printf("Спроба читати файл:\n");
+    int ret = system("cat /tmp/tempfile.txt");
+    if (ret != 0)
+        printf("Читання не дозволено\n");
 
-    # Check access as current user
-    check_access(path)
+    printf("Спроба записати у файл:\n");
+    ret = system("echo 'Новий рядок' >> /tmp/tempfile.txt");
+    if (ret != 0)
+        printf("Запис не дозволено\n");
 
-    # Cleanup
-    try:
-        os.remove(path)
-    except Exception:
-        pass
+    return 0;
+}
