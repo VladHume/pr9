@@ -1,10 +1,12 @@
-import subprocess
+#include <stdio.h>
+#include <stdlib.h>
 
-def run_commands():
-    whoami = subprocess.check_output(['whoami']).decode().strip()
-    user_id = subprocess.check_output(['id']).decode().strip()
-    print(f"User: {whoami}")
-    print(f"ID and groups: {user_id}")
+int main() {
+    printf("Результат whoami:\n");
+    system("whoami");
 
-if __name__ == "__main__":
-    run_commands()
+    printf("\nРезультат id:\n");
+    system("id");
+
+    return 0;
+}
