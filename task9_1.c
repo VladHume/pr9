@@ -1,20 +1,30 @@
-import os
-import subprocess
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 
-def get_regular_users(min_uid=1000):
-    users = []
-    current_uid = os.getuid()
-    output = subprocess.check_output(['getent', 'passwd']).decode()
-    for line in output.splitlines():
-        parts = line.split(':')
-        username, uid = parts[0], int(parts[2])
-        if uid >= min_uid and uid != current_uid:
-            users.append(username)
-    return users
+int main() {
+    FILE *fp = popen("getent passwd", "r");
+    if (fp == NULL) {
+        perror("popen");
+        exit(EXIT_FAILURE);
+    }
 
-if __name__ == "__main__":
-    users = get_regular_users()
-    if users:
-        print("Other regular users:", ', '.join(users))
-    else:
-        print("No other regular users found.")
+    char line[512];
+    uid_t uid = getuid();
+
+    while (fgets(line, sizeof(line), fp)) {
+        char *username = strtok(line, ":");
+        strtok(NULL, ":"); // password field
+        char *uid_str = strtok(NULL, ":");
+
+        if (username && uid_str) {
+            int user_uid = atoi(uid_str);
+            if (user_uid >= 1000 && user_uid != uid) { 
+                printf("Found another regular user: %s (UID: %d)\n", username, user_uid);
+            }
+        }
+    }
+
+    pclose(fp);
+    return 0;
+}
