@@ -1,34 +1,23 @@
-import os
-import subprocess
+#include <stdio.h>
+#include <stdlib.h>
 
-def create_file(path):
-    with open(path, 'w') as f:
-        f.write("Sample content\n")
+int main() {
+    system("echo 'Test file' > /tmp/userfile.txt");
+    printf("Файл створено користувачем\n");
 
-def copy_as_root(src, dest):
-    subprocess.run(['sudo', 'cp', src, dest])
-    subprocess.run(['sudo', 'chown', 'root:root', dest])
+    printf("Копіюємо файл від імені root...\n");
+    system("sudo cp /tmp/userfile.txt ~/rootcopy.txt");
+    system("sudo chown root:root ~/rootcopy.txt");
 
-def try_modify(path):
-    try:
-        with open(path, 'a') as f:
-            f.write("Adding text\n")
-        print("File modified successfully.")
-    except PermissionError:
-        print("Permission denied: cannot modify file.")
+    printf("Спроба змінити файл...\n");
+    int ret = system("echo 'Додаємо рядок' >> ~/rootcopy.txt");
+    if (ret != 0)
+        printf("Неможливо змінити файл: немає прав\n");
 
-def try_delete(path):
-    try:
-        os.remove(path)
-        print("File deleted successfully.")
-    except PermissionError:
-        print("Permission denied: cannot delete file.")
+    printf("Спроба видалити файл...\n");
+    ret = system("rm ~/rootcopy.txt");
+    if (ret != 0)
+        printf("Неможливо видалити файл: немає прав\n");
 
-if __name__ == "__main__":
-    user_file = '/tmp/user_file.txt'
-    root_copy = '/home/username/user_file_copy.txt'  # change username appropriately
-    
-    create_file(user_file)
-    copy_as_root(user_file, root_copy)
-    try_modify(root_copy)
-    try_delete(root_copy)
+    return 0;
+}
