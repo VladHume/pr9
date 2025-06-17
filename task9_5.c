@@ -3,21 +3,21 @@
 
 int main() {
     system("touch /tmp/tempfile.txt");
-    system("echo 'Дані' > /tmp/tempfile.txt");
+    system("echo 'Data' > /tmp/tempfile.txt");
 
-    printf("Змінюємо власника на root і права доступу...\n");
+    printf("Change the owner to root and access rights...\n");
     system("sudo chown root:root /tmp/tempfile.txt");
     system("sudo chmod 600 /tmp/tempfile.txt");
 
-    printf("Спроба читати файл:\n");
+    printf("Trying to read the file:\n");
     int ret = system("cat /tmp/tempfile.txt");
     if (ret != 0)
-        printf("Читання не дозволено\n");
+        printf("Reading isn`t allowed\n");
 
-    printf("Спроба записати у файл:\n");
-    ret = system("echo 'Новий рядок' >> /tmp/tempfile.txt");
+    printf("Attempt to write to file:\n");
+    ret = system("echo 'New line' >> /tmp/tempfile.txt");
     if (ret != 0)
-        printf("Запис не дозволено\n");
+        printf("Writing isn`t allowed\n");
 
     return 0;
 }
