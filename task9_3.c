@@ -12,12 +12,12 @@ int main() {
     printf("Trying to change file...\n");
     int ret = system("echo 'Adding new line' >> ~/rootcopy.txt");
     if (ret != 0)
-        printf("Can not change file: access denied\n");
+        printf("Can not change file: no rights\n");
 
     printf("Trying to delete file...\n");
     ret = system("rm ~/rootcopy.txt");
     if (ret != 0)
-        printf("Can not delete file: permission denied\n");
+        printf("Can not delete file: no rights\n");
 
     return 0;
 }
