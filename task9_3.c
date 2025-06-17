@@ -3,21 +3,21 @@
 
 int main() {
     system("echo 'Test file' > /tmp/userfile.txt");
-    printf("Файл створено користувачем\n");
+    printf("File created by user\n");
 
-    printf("Копіюємо файл від імені root...\n");
+    printf("Copy file from root...\n");
     system("sudo cp /tmp/userfile.txt ~/rootcopy.txt");
     system("sudo chown root:root ~/rootcopy.txt");
 
-    printf("Спроба змінити файл...\n");
-    int ret = system("echo 'Додаємо рядок' >> ~/rootcopy.txt");
+    printf("Trying to change file...\n");
+    int ret = system("echo 'Adding new line' >> ~/rootcopy.txt");
     if (ret != 0)
-        printf("Неможливо змінити файл: немає прав\n");
+        printf("Can not change file: access denied\n");
 
-    printf("Спроба видалити файл...\n");
+    printf("Trying to delete file...\n");
     ret = system("rm ~/rootcopy.txt");
     if (ret != 0)
-        printf("Неможливо видалити файл: немає прав\n");
+        printf("Can not delete file: permission denied\n");
 
     return 0;
 }
