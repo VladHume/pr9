@@ -1,29 +1,24 @@
-import os
-import subprocess
+#include <stdio.h>
+#include <stdlib.h>
 
-def list_and_test(path):
-    print(f"Listing files in {path}:")
-    try:
-        files = os.listdir(path)
-    except PermissionError:
-        print("Permission denied to list directory.")
-        return
+int main() {
+    printf("Файли в домашній теці:\n");
+    system("ls -l ~");
 
-    for f in files[:5]:  # limit output for demo
-        full_path = os.path.join(path, f)
-        try:
-            st = os.stat(full_path)
-            print(f"{f}: owner={st.st_uid}, permissions={oct(st.st_mode)}")
+    printf("\nФайли в /usr/bin:\n");
+    system("ls -l /usr/bin");
 
-            can_read = os.access(full_path, os.R_OK)
-            can_write = os.access(full_path, os.W_OK)
-            can_exec = os.access(full_path, os.X_OK)
-            print(f"  Read: {can_read}, Write: {can_write}, Execute: {can_exec}")
-        except FileNotFoundError:
-            pass
+    printf("\nФайли в /etc:\n");
+    system("ls -l /etc");
 
-if __name__ == "__main__":
-    home = os.path.expanduser('~')
-    for directory in [home, '/usr/bin', '/etc']:
-        list_and_test(directory)
-        print()
+    printf("\nСпроба читання файлу /etc/shadow:\n");
+    system("cat /etc/shadow");
+
+    printf("\nСпроба записати у /etc/passwd:\n");
+    system("echo 'Тест' >> /etc/passwd");
+
+    printf("\nСпроба виконати програму /usr/bin/ls:\n");
+    system("/usr/bin/ls");
+
+    return 0;
+}
