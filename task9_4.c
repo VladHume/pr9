@@ -2,10 +2,10 @@
 #include <stdlib.h>
 
 int main() {
-    printf("Результат whoami:\n");
+    printf("Result of whoami:\n");
     system("whoami");
 
-    printf("\nРезультат id:\n");
+    printf("\Result of id:\n");
     system("id");
 
     return 0;
